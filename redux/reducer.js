@@ -11,6 +11,11 @@ export default function reducer(state = usersState, action) {
 			state = { ...state, loading: false, error: false, users: [ ...state.users, action.payload ] };
 			console.log(state);
 			break;
+		case 'DELETE_USER':
+			const copyUsers = state.users;
+			copyUsers.shift(action.payload);
+			state = { ...state, users: [ ...copyUsers ] };
+			break;
 		default:
 			return state;
 	}

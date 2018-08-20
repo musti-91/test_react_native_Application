@@ -13,7 +13,7 @@ class Home extends Component {
 	}
 	static propTypes = {
 		getUsers: PropTypes.func.isRequired,
-		navigator: PropTypes.object.isRequired
+		title: PropTypes.string.isRequired
 	};
 	_onNavigate = () => {
 		this.props.navigator.push({

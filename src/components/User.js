@@ -11,11 +11,12 @@ import {
 	Animated,
 	Easing
 } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
+import { List, ListItem, Icon } from 'react-native-elements';
 
 import { connect } from 'react-redux';
 import UserProfile from './UserProfile';
 import AddUser from './AddUser';
+import { deleteUser } from '../../redux/userAction';
 
 class User extends Component {
 	state = {
@@ -42,6 +43,9 @@ class User extends Component {
 			title: 'Add User',
 			component: AddUser
 		});
+	};
+	_onDelete = (id) => {
+		this.props.deleteUser(id);
 	};
 	render() {
 		const { users } = this.props;
@@ -70,7 +74,7 @@ class User extends Component {
 								chevronColor="#EF8A70"
 								subtitle={user.phone}
 								subtitleStyle={{ color: '#EF8A70', fontSize: 10, marginLeft: 10 }}
-								rightTitle="Profile"
+								rightIcon={<Icon name="delete" onPress={() => this._onDelete(i)} color="red" />}
 								style={styles.colContent}
 								containerStyle={styles.colContent}
 							/>
@@ -134,4 +138,9 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect((state) => ({ users: state.users.users, title: 'Home' }), null)(User);
+export default connect(
+	(state) => ({ users: state.users.users, title: 'Home' }),
+	(dispatchEvent) => ({
+		deleteUser: (id) => dispatchEvent(deleteUser(id))
+	})
+)(User);

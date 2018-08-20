@@ -14,4 +14,11 @@ export const addUser = (user) => {
 		payload: user
 	};
 };
+
+export const deleteUser = (id) => {
+	return {
+		type: 'DELETE_USER',
+		payload: id
+	};
+};
 export default getUsers;
