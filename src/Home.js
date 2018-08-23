@@ -3,22 +3,27 @@ import PropTypes from 'prop-types';
 import { View, Text, StyleSheet, TouchableHighlight, Image } from 'react-native';
 import { connect } from 'react-redux';
 //Actions
-import getUsers from '../redux/userAction';
+import getUsers from '../redux/users/userAction';
+import getPosts from '../redux/posts/postAction';
+
 //components
-import User from './components/User';
+import User from './components/User/User';
+import Posts from './components/Posts/Posts';
 
 class Home extends Component {
-	componentDidMount() {
-		this.props.getUsers();
-	}
 	static propTypes = {
-		getUsers: PropTypes.func.isRequired,
 		title: PropTypes.string.isRequired
 	};
 	_onNavigate = () => {
 		this.props.navigator.push({
 			title: 'Users',
-			component: User
+			component: (props) => <User {...props} title="USERS" />
+		});
+	};
+	_postsNavigate = () => {
+		this.props.navigator.push({
+			title: 'posts',
+			component: (props) => <Posts {...props} title="posts" />
 		});
 	};
 	render() {
@@ -32,7 +37,10 @@ class Home extends Component {
 					</Text>
 				</View>
 				<TouchableHighlight underlayColor="#F5FCFF" onPress={this._onNavigate} style={styles.btn_container}>
-					<Text style={styles.btn_users}>Show All users</Text>
+					<Text style={styles.btn_users}>Users</Text>
+				</TouchableHighlight>
+				<TouchableHighlight underlayColor="#F5FCFF" onPress={this._postsNavigate} style={styles.btn_container}>
+					<Text style={styles.btn_users}>Instagraph</Text>
 				</TouchableHighlight>
 			</View>
 		);
@@ -44,10 +52,12 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#F5FCFF',
-		height: '100%'
+		height: '100%',
+		opacity: 0.9
 	},
 	btn_container: {
 		backgroundColor: 'teal',
+		opacity: 0.9,
 		width: 300,
 		height: 40,
 		borderRadius: 20,
@@ -70,7 +80,8 @@ const styles = StyleSheet.create({
 		marginTop: 50
 	}
 });
-const mapDispatchToProps = (dispatchEvent) => ({
-	getUsers: () => dispatchEvent(getUsers)
-});
-export default connect((state) => ({ users: state.users }), mapDispatchToProps)(Home);
+
+export default connect(
+	(state) => ({ users: state.users.users, posts: state.posts.posts, comments: state.comments }),
+	null
+)(Home);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Text, View, TextInput, Button } from 'react-native';
 import { connect } from 'react-redux';
-import { addUser } from '../../redux/userAction';
+import { addUser } from '../../../redux/users/userAction';
 
 import User from './User';
 

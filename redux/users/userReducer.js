@@ -1,6 +1,7 @@
+import { userData } from './userData';
 const usersState = {
 	loading: false,
-	users: []
+	users: userData
 };
 export default function reducer(state = usersState, action) {
 	switch (action.type) {
@@ -9,7 +10,6 @@ export default function reducer(state = usersState, action) {
 			break;
 		case 'ADD_USER':
 			state = { ...state, loading: false, error: false, users: [ ...state.users, action.payload ] };
-			console.log(state);
 			break;
 		case 'DELETE_USER':
 			const copyUsers = state.users;

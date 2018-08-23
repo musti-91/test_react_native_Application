@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, NavigatorIOS } from 'react-native';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { NavigatorIOS } from 'react-native';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import { createLogger } from 'redux-logger';
-// reducer
-import reducer from './redux/reducer';
+// redux store
+import store from './redux/store';
+// components
 import Home from './src/Home';
-
-const store = createStore(combineReducers({ users: reducer }), applyMiddleware(thunk, createLogger()));
 
 export default class App extends Component {
 	render() {
@@ -24,15 +20,15 @@ export default class App extends Component {
 					translucent={true}
 					initialRoute={{
 						title: 'Home',
-						component: Home
+						component: (props) => <Home {...props} title="home" />
 					}}
 				/>
 			</Provider>
 		);
 	}
 }
-const styles = StyleSheet.create({
+const styles = {
 	content: {
 		flex: 1
 	}
-});
+};

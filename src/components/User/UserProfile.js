@@ -4,7 +4,8 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 
 class UserProfile extends Component {
 	static propTypes = {
-		user: PropTypes.object.isRequired
+		user: PropTypes.object.isRequired,
+		title: PropTypes.string.isRequired
 	};
 	render() {
 		const { user } = this.props;
@@ -12,7 +13,7 @@ class UserProfile extends Component {
 			<View style={styles.userProfile}>
 				<View style={styles.imageContainer}>
 					<Image
-						source={require('../images/user.png')}
+						source={{ uri: user.img_url }}
 						style={{ width: 100, height: 100, borderRadius: 50, marginRight: 30 }}
 					/>
 					<Text style={styles.txt}>{user.name}</Text>
@@ -20,13 +21,13 @@ class UserProfile extends Component {
 				<View style={styles.table}>
 					<View style={styles.table_tr}>
 						<Text style={{ marginRight: 10 }}>
-							<Image source={require('../images/username.png')} style={styles.ico} />
+							<Image source={require('../../images/username.png')} style={styles.ico} />
 						</Text>
 						<Text style={styles.label}>{user.username}</Text>
 					</View>
 					<View style={styles.table_tr}>
 						<Text style={{ marginRight: 10 }}>
-							<Image source={require('../images/address.png')} style={styles.ico} />
+							<Image source={require('../../images/address.png')} style={styles.ico} />
 						</Text>
 						<Text style={styles.label}>
 							{user.address.street}, {user.address.suite},{user.address.city}
@@ -34,19 +35,19 @@ class UserProfile extends Component {
 					</View>
 					<View style={styles.table_tr}>
 						<Text style={{ marginRight: 10 }}>
-							<Image source={require('../images/phone.png')} style={styles.ico} />
+							<Image source={require('../../images/phone.png')} style={styles.ico} />
 						</Text>
 						<Text style={styles.label}>{user.phone}</Text>
 					</View>
 					<View style={styles.table_tr}>
 						<Text style={{ marginRight: 10 }}>
-							<Image source={require('../images/email.png')} style={styles.ico} />
+							<Image source={require('../../images/email.png')} style={styles.ico} />
 						</Text>
 						<Text style={styles.label}> {user.email}</Text>
 					</View>
 					<View style={styles.table_tr}>
 						<Text style={{ marginRight: 10 }}>
-							<Image source={require('../images/company.png')} style={styles.ico} />
+							<Image source={require('../../images/company.png')} style={styles.ico} />
 						</Text>
 						<Text style={styles.label}>
 							{user.company.name},{user.company.catchPhrase}
@@ -54,7 +55,7 @@ class UserProfile extends Component {
 					</View>
 					<View style={styles.table_tr}>
 						<Text style={{ marginRight: 10 }}>
-							<Image source={require('../images/website.png')} style={styles.ico} />
+							<Image source={require('../../images/website.png')} style={styles.ico} />
 						</Text>
 						<Text style={styles.label}>{user.website}</Text>
 					</View>

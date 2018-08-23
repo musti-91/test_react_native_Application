@@ -1,22 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-	View,
-	StyleSheet,
-	TouchableHighlight,
-	ActivityIndicator,
-	Image,
-	Text,
-	TouchableOpacity,
-	Animated,
-	Easing
-} from 'react-native';
+import { View, StyleSheet, TouchableHighlight, Image, TouchableOpacity, Animated, Easing, Alert } from 'react-native';
 import { List, ListItem, Icon } from 'react-native-elements';
 
 import { connect } from 'react-redux';
 import UserProfile from './UserProfile';
 import AddUser from './AddUser';
-import { deleteUser } from '../../redux/userAction';
+import { deleteUser } from '../../../redux/users/userAction';
+import { styles } from './styles';
+//loader icon
+import Loader from '../HOC/Loader';
 
 class User extends Component {
 	state = {
@@ -33,8 +26,8 @@ class User extends Component {
 	};
 	_onNavigate = (user) => {
 		this.props.navigator.push({
-			title: 'User Profile',
-			component: UserProfile,
+			title: `${user.name}`,
+			component: (props) => <UserProfile {...props} title="User Profile" />,
 			passProps: { user }
 		});
 	};
@@ -45,18 +38,18 @@ class User extends Component {
 		});
 	};
 	_onDelete = (id) => {
-		this.props.deleteUser(id);
+		Alert.alert('Are you sure?', 'Confirm', [
+			{ text: 'Cancel', onPress: () => null },
+			{ text: 'Yes', onPress: () => this.props.deleteUser(id) }
+		]);
 	};
 	render() {
 		const { users } = this.props;
 		let { fadeIn } = this.state.style;
-		return users.length === 0 ? (
-			<View style={styles.loading}>
-				<ActivityIndicator size="large" color="green" />
-			</View>
-		) : (
+		const { usersContent, titleStyle, colContent, add_user_container, add_user_image } = styles;
+		return (
 			<View style={{ marginTop: 50 }}>
-				<List style={styles.usersContent}>
+				<List style={usersContent}>
 					{users.map((user, i) => (
 						<TouchableHighlight
 							onPress={() => this._onNavigate(user)}
@@ -66,28 +59,28 @@ class User extends Component {
 						>
 							<ListItem
 								roundAvatar
-								avatar={require('../images/user.png')}
+								avatar={{ uri: user.img_url }}
 								key={i}
 								title={user.name}
-								titleStyle={styles.titleStyle}
-								leftIcon={{ source: require('../images/logo.png') }}
+								titleStyle={titleStyle}
+								leftIcon={{ source: { uri: user.img_url } }}
 								chevronColor="#EF8A70"
 								subtitle={user.phone}
 								subtitleStyle={{ color: '#EF8A70', fontSize: 10, marginLeft: 10 }}
 								rightIcon={<Icon name="delete" onPress={() => this._onDelete(i)} color="red" />}
-								style={styles.colContent}
-								containerStyle={styles.colContent}
+								style={colContent}
+								containerStyle={colContent}
 							/>
 						</TouchableHighlight>
 					))}
-					<View style={styles.add_user_container}>
+					<View style={add_user_container}>
 						<Animated.View style={{ opacity: fadeIn }}>
 							<TouchableOpacity
 								onPress={this._onAddUser}
 								style={{ borderRadius: 25 }}
 								underlayColor="#fff"
 							>
-								<Image source={require('../images/plus.png')} style={styles.add_user_image} />
+								<Image source={require('../../images/plus.png')} style={add_user_image} />
 							</TouchableOpacity>
 						</Animated.View>
 					</View>
@@ -96,51 +89,9 @@ class User extends Component {
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-	usersContent: {
-		justifyContent: 'flex-start',
-		alignItems: 'flex-start',
-		backgroundColor: '#F01'
-	},
-	loading: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	col: {
-		width: '90%',
-		height: 50,
-		borderRadius: 5,
-		alignSelf: 'center'
-	},
-	colContent: {
-		width: '100%',
-		height: 50
-	},
-	titleStyle: {
-		marginLeft: 10,
-		borderColor: 'teal',
-		color: 'white',
-		color: 'teal'
-	},
-	add_user_container: {
-		alignItems: 'center',
-		justifyContent: 'flex-end',
-		flexDirection: 'row',
-		marginTop: 20,
-		paddingRight: 20
-	},
-	add_user_image: {
-		width: 50,
-		height: 50,
-		borderRadius: 25
-	}
-});
-
 export default connect(
 	(state) => ({ users: state.users.users, title: 'Home' }),
 	(dispatchEvent) => ({
 		deleteUser: (id) => dispatchEvent(deleteUser(id))
 	})
-)(User);
+)(Loader(User));
